@@ -1,6 +1,12 @@
 import { categories, hello } from "../routes/data.js";
-import { users, wares, messages } from "../routes/data.js";
-import { User, Ware, Category, Message } from "../routes/types.js";
+import { users, wares, messages, conversations } from "../routes/data.js";
+import {
+  User,
+  Ware,
+  Category,
+  Message,
+  Conversation,
+} from "../routes/types.js";
 
 const MutationResolvers = {
   Mutation: {
@@ -74,25 +80,47 @@ const MutationResolvers = {
       _context: never,
       _info: never
     ) => {
-      if (
-        !users.find((user) => user.userId === args.messageSenderId) ||
-        !users.find((user) => user.userId === args.messageReceiverId)
-      ) {
+      const senderExists = users.some(
+        (user) => user.userId === args.messageSenderId
+      );
+      const receiverExists = users.some(
+        (user) => user.userId === args.messageReceiverId
+      );
+
+      if (!senderExists || !receiverExists) {
         throw new Error("User not found");
       }
+
+      if (args.messageSenderId === args.messageReceiverId) {
+        throw new Error("Sender and receiver cannot be the same");
+      }
+
       const newMessage: Message = {
         messageId: messages.length + 1,
         messageText: args.messageText,
         messageDate: new Date(),
-        messageSender: users.find(
-          (user) => user.userId === args.messageSenderId
-        )!.userName,
-        messageReceiver: users.find(
-          (user) => user.userId === args.messageReceiverId
-        )!.userName,
+        senderId: args.messageSenderId,
+        receiverId: args.messageReceiverId,
       };
+
       messages.push(newMessage);
-      return newMessage;
+
+      const conversation = conversations.find(
+        (conversation) =>
+          (conversation.personOneId === args.messageSenderId &&
+            conversation.personTwoId === args.messageReceiverId) ||
+          (conversation.personOneId === args.messageReceiverId &&
+            conversation.personTwoId === args.messageSenderId)
+      );
+
+      conversation
+        ? conversation.messages.push(newMessage)
+        : conversations.push({
+            conversationId: conversations.length + 1,
+            personOneId: args.messageSenderId,
+            personTwoId: args.messageReceiverId,
+            messages: [newMessage],
+          });
     },
   },
 };

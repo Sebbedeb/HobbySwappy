@@ -1,0 +1,13 @@
+.main-layout-container {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    height: 100vh; /* Set height to 100% of the viewport height */
+  }
+  
+  .content-container {
+    flex: 1; /* Allow content container to grow and fill remaining space */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  }
+  
+  /* Additional styling as needed */
+  

@@ -1,13 +1,13 @@
-import useState from "react";
-import { gql, useQuery, useMutation } from "@apollo/client";
+import React from 'react';
+import MainLayout from './layouts/MainLayout';
+import FrontPage from './pages/FrontPage';
 
-function App() {
-
+const App: React.FC = () => {
   return (
-    <div>
-      <img src= "../images/HobbySwappy.png" alt="logo" width={300} height={100} />
-    </div>
+    <MainLayout>
+      <FrontPage />
+    </MainLayout>
   );
-}
+};
 
 export default App;

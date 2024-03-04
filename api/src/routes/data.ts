@@ -1,4 +1,4 @@
-import { Category, Ware, User, Message } from "./types";
+import { Category, Ware, User, Message, Conversation } from "./types";
 
 export const categories: Category[] = [
     {
@@ -154,15 +154,37 @@ export const messages: Message[] = [
         messageId: 1,
         messageText: "Hello, I would like to buy your Charizard card",
         messageDate: new Date(),
-        messageSender: users[0].userName,
-        messageReceiver: users[1].userName
+        senderId: 2,
+        receiverId: 1
     },
     {
         messageId: 2,
         messageText: "Sure, I would like to trade it for your Monopoly game",
         messageDate: new Date(),
-        messageSender: users[1].userName,
-        messageReceiver: users[0].userName
+        senderId: 1,
+        receiverId: 2
+    },
+    {
+        messageId: 3,
+        messageText: "I'm sorry, I can't do that. I need the money",
+        messageDate: new Date(),
+        senderId: 2,
+        receiverId: 3
+    }
+];
+
+export const conversations: Conversation[] = [
+    {
+        conversationId: 1,
+        personOneId: 1,
+        personTwoId: 2,
+        messages: [messages[0], messages[1]]
+    },
+    {
+        conversationId: 2,
+        personOneId: 1,
+        personTwoId: 3,
+        messages: [messages[2]]
     }
 ];
 

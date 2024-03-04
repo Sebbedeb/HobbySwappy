@@ -1,5 +1,6 @@
-import { hello } from "../routes/data.js";
+import { conversations, hello } from "../routes/data.js";
 import { categories, users, wares, messages } from "../routes/data.js";
+import { User } from "../routes/types.js";
 
 const QueryResolvers = {
   Query: {
@@ -13,24 +14,22 @@ const QueryResolvers = {
     ware: (_parent: never, args: { wareId: number }) => {
       return wares.find((ware) => ware.wareId === args.wareId);
     },
+      
 
-    conversation: (_parent: never, args: { senderId: number, receiverId: number }) => {
+    conversation: (_parent: never, args: { conversationId: number}) => {
+      return conversations.find((conversation) => {
+        return conversation.conversationId === args.conversationId;
+      });
+    },
 
-      if(!users.find((user) => user.userId === args.senderId) || !users.find((user) => user.userId === args.receiverId)) {
+    conversations: (_parent: never, args: { userId: number }) => {
+      if(!users.find((user) => user.userId === args.userId)) {
         throw new Error("User not found");
       }
-      const sender = users.find((user) => user.userId === args.senderId);
-      const receiver = users.find((user) => user.userId === args.receiverId);
-
-      const conversation = {
-        senderId: args.senderId,
-        receiverId: args.receiverId,
-        messages: messages.filter((message) => {
-          return (message.messageSender === sender?.userName && message.messageReceiver === receiver?.userName || message.messageSender === receiver?.userName && message.messageReceiver === sender?.userName);
-        }),
-      };
-      return conversation;
-    }
+      return conversations.filter((conversations) => { 
+        return conversations.personOneId === args.userId || conversations.personOneId === args.userId;
+      });
+    },
   }
 }
 

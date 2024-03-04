@@ -9,7 +9,8 @@ const typeDefs = `
     wares: [Ware]
     user(userId: Int!): User
     ware(wareId: Int!): Ware
-    conversation(senderId: Int!, receiverId: Int!): Conversation
+    conversation(conversationId: Int!): Conversation
+    conversations(userId: Int!): [Conversation]
   }
   type Mutation {
     createUser(userName: String!, userPassword: String!, userAdress: String!, userZip: Int!): User
@@ -33,8 +34,8 @@ const typeDefs = `
     messageId: Int
     messageText: String
     messageDate: String
-    messageSender: String
-    messageReceiver: String
+    senderId: Int
+    receiverId: Int
   }
   type Ware {
     wareId: Int
@@ -45,8 +46,9 @@ const typeDefs = `
     User: User
   }
   type Conversation {
-    senderId: Int
-    receiverId: Int
+    conversationId: Int
+    personOneId: Int
+    personTwoId: Int
     messages: [Message]
   }
 `;

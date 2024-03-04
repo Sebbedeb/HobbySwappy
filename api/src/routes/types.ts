@@ -20,13 +20,14 @@ type Message = {
     messageId: number;
     messageText: string;
     messageDate: Date;
-    messageSender: string;
-    messageReceiver: string;
+    senderId: number;
+    receiverId: number;
 }
 
 type Conversation = {
-    senderId: number;
-    receiverId: number;
+    conversationId: number;
+    personOneId: number;
+    personTwoId: number;
     messages: Message[];
 }
 
