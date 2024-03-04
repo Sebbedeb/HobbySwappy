@@ -7,3 +7,7 @@ Engage with a vibrant community of hobbyists like never before. Share experience
 ## Refresh Your Interests
 
 Rediscover the joy of your hobbies with Hobby Swappy. Explore fresh perspectives, find inspiration, and breathe new life into your passions through our diverse array of content and interactions.
+
+### API
+https://nominatim.openstreetmap.org/ui/search.html?<params>
+https://nominatim.openstreetmap.org/ui/details.html?<params>
