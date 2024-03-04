@@ -1,16 +1,27 @@
-type Person = {
-    id: string;
-    name: string;
-    email: string;
-    age?: number;
-    adress?: Adress;
-};
+type ware = {
+    wareId: string;
+    wareTitle: string;
+    wareDescription: string;
+    warePrice: number;
+}
 
-type Adress = {
-    id: string;
-    street: string;
-    city: string;
-    zip: string;
-    persons?: Person[];
-};
-export { Person, Adress };
+type user = {
+    userId: string;
+    userName: string;
+    userPassword: string;
+    userAdress: string;
+}
+
+type message = {
+    messageId: string;
+    messageText: string;
+    messageDate: Date;
+    messageSender: string;
+    messageReceiver: string;
+}
+
+type category = {
+    categoryId: string;
+    categoryName: "Trading Cards" | "Board Games" | "Video Games" | "Books" | "Clothes" | "Electronics" | "Sports Equipment" | "Antiques" | "Other";
+    categoryDescription: string;
+}
