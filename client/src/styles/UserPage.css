@@ -1,0 +1,35 @@
+/* UserPage.css */
+.user-page-container {
+    display: flex;
+  }
+  
+  .sidebar {
+    width: 200px; /* Adjust width as needed */
+    background-color: #f0f0f0;
+    padding: 20px;
+  }
+  
+  .content {
+    flex: 1; /* Grow to fill remaining space */
+    padding: 20px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    margin-bottom: 10px;
+  }
+  
+  .sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .sidebar ul li a:hover {
+    color: #000;
+    font-weight: bold;
+  }
+  

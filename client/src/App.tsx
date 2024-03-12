@@ -1,13 +1,17 @@
-import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
-import FrontPage from './pages/FrontPage';
+import UserPage from './pages/UserPage';
 
-const App: React.FC = () => {
+function App() {
   return (
-    <MainLayout>
-      <FrontPage />
-    </MainLayout>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLayout />} >
+        <Route path="/user/*" element={<UserPage userId={1} />} />
+        </Route>
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;

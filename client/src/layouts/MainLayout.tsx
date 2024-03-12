@@ -1,18 +1,25 @@
-import React, { ReactNode } from 'react';
+import React, { useEffect, useState } from 'react';
 import TopBar from '../components/TopBar';
 import '../styles/MainLayout.css';
+import FrontPage from '../pages/FrontPage';
+import { Outlet, useLocation } from 'react-router-dom';
 
-interface MainLayoutProps {
-  children: ReactNode;
-}
+const MainLayout: React.FC = () => {
+  const location = useLocation();
+  const [currentPath, setCurrentPath] = useState(location.pathname);
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  useEffect(() => {
+    setCurrentPath(location.pathname);
+  }, [location.pathname]);
+
   return ( 
     <div>
       <TopBar />
-    <div className="main-layout-container">
-      <div className="content-container">{children}</div>
-    </div>
+      <div className="main-layout-container">
+        <div id="content">
+          {currentPath === "/" ? <FrontPage /> : <Outlet />}
+        </div>
+      </div>
     </div>
   );
 }
