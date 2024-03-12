@@ -1,50 +1,57 @@
-import React from 'react';
-import { User } from '../types';
+import React, { useState } from 'react';
 
 interface UserSignUpFormProps {
-    handleSubmit: (formData: { userName: string, userPassword: string, userAdress: string, userZip: number }) => void;
+    handleSubmit: (newUser: { userName: string, userPassword: string, userAddress: string, userZip: number }) => void;
 }
 
-function UserSignUpForm({ handleSubmit }: UserSignUpFormProps) {
-    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+const UserSignUpForm: React.FC<UserSignUpFormProps> = ({ handleSubmit }) => {
+    const [newUser, setNewUser] = useState({
+        userName: '',
+        userPassword: '',
+        userAddress: '',
+        userZip: 0
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setNewUser(prevState => ({
+            ...prevState,
+            [name]: name === 'userZip' ? parseInt(value) : value // Convert userZip to number
+        }));
+    };
+
+    const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const newUser: User = {
-            userId: 123,
-            userName: (event.currentTarget.elements.namedItem('userName') as HTMLInputElement)?.value,
-            userPassword: (event.currentTarget.elements.namedItem('userPassword') as HTMLInputElement)?.value,
-            userAdress: (event.currentTarget.elements.namedItem('userAdress') as HTMLInputElement)?.value,
-            userZip: Number((event.currentTarget.elements.namedItem('userZip') as HTMLInputElement)?.value)
-        };
-        handleSubmit(newUser);
-        newUser.userName = '';
-        newUser.userPassword = '';
-        newUser.userAdress = '';
-        newUser.userZip = 0;
+        setIsSubmitting(true);
+        await handleSubmit(newUser);
+        setIsSubmitting(false);
     };
 
     return (
         <div>
+            <h1>Sign up</h1>
             <form onSubmit={onSubmit}>
                 <div>
                     <label htmlFor="userName">Username: </label>
-                    <input type="text" id="userName" name="userName" />
+                    <input type="text" id="userName" name="userName" value={newUser.userName} onChange={handleChange} />
                 </div>
                 <div>
                     <label htmlFor="userPassword">Password: </label>
-                    <input type="password" id="userPassword" name="userPassword" />
+                    <input type="password" id="userPassword" name="userPassword" value={newUser.userPassword} onChange={handleChange} />
                 </div>
                 <div>
-                    <label htmlFor="userAdress">Address: </label>
-                    <input type="text" id="userAdress" name="userAdress" />
+                    <label htmlFor="userAddress">Address: </label>
+                    <input type="text" id="userAddress" name="userAddress" value={newUser.userAddress} onChange={handleChange} />
                 </div>
                 <div>
                     <label htmlFor="userZip">Zip: </label>
-                    <input type="number" id="userZip" name="userZip" />
+                    <input type="number" id="userZip" name="userZip" value={newUser.userZip} onChange={handleChange} />
                 </div>
-                <button type="submit">Sign Up</button>
+                <button type="submit" disabled={isSubmitting}>Sign Up</button>
             </form>
         </div>
     );
-}
+};
 
 export default UserSignUpForm;

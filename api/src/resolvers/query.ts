@@ -1,34 +1,71 @@
-import { conversations, hello } from "../routes/data.js";
-import { categories, users, wares, messages } from "../routes/data.js";
-import { User } from "../routes/types.js";
+import UserModel from '../models/UserModel.js';
+import WareModel from '../models/WareModel.js';
+import ConversationModel from '../models/ConversationModel.js';
+import CategoryModel from '../models/CategoryModel.js';
 
 const QueryResolvers = {
   Query: {
-    users: () => users,
-    user: (_parent: never, args: { userId: number }) => {
-      return users.find((user) => user.userId === args.userId);
-    },
-    categories: () => categories,
-
-    wares: () => wares,
-    ware: (_parent: never, args: { wareId: number }) => {
-      return wares.find((ware) => ware.wareId === args.wareId);
-    },
-      
-
-    conversation: (_parent: never, args: { conversationId: number}) => {
-      return conversations.find((conversation) => {
-        return conversation.conversationId === args.conversationId;
-      });
-    },
-
-    conversations: (_parent: never, args: { userId: number }) => {
-      if(!users.find((user) => user.userId === args.userId)) {
-        throw new Error("User not found");
+    users: async () => {
+      try {
+        const users = await UserModel.find();
+        return users;
+      } catch (error) {
+        throw new Error('Failed to fetch users');
       }
-      return conversations.filter((conversations) => { 
-        return conversations.personOneId === args.userId || conversations.personOneId === args.userId;
-      });
+    },
+
+    user: async (_parent: never, args: { userId: number }) => {
+      try {
+        const user = await UserModel.findOne({ userId: args.userId });
+        return user;
+      } catch (error) {
+        throw new Error('Failed to fetch user');
+      }
+    },
+
+    categories: async () => {
+      try {
+        const categories = await CategoryModel.find();
+        return categories;
+      } catch (error) {
+        throw new Error('Failed to fetch categories');
+      }
+    },
+
+    wares: async () => {
+      try {
+        const wares = await WareModel.find();
+        return wares;
+      } catch (error) {
+        throw new Error('Failed to fetch wares');
+      }
+    },
+
+    ware: async (_parent: never, args: { wareId: number }) => {
+      try {
+        const ware = await WareModel.findOne({ wareId: args.wareId });
+        return ware;
+      } catch (error) {
+        throw new Error('Failed to fetch ware');
+      }
+    },
+
+    conversation: async (_parent: never, args: { conversationId: number}) => {
+      try {
+        const conversation = await ConversationModel.findOne({ conversationId: args.conversationId });
+        return conversation;
+      } catch (error) {
+        throw new Error('Failed to fetch conversation');
+      }
+    },
+
+    conversations: async (_parent: never, args: { userId: number }) => {
+      try {
+        const conversations = await ConversationModel.find({ $or: [{ personOneId: args.userId }, { personTwoId: args.userId }] });
+        return conversations;
+      } catch (error) {
+        throw new Error('Failed to fetch conversations');
+      }
     },
   }
 }

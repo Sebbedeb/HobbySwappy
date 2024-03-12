@@ -7,24 +7,29 @@ function UserSignUp() {
     const navigate = useNavigate(); // Initialize useNavigate hook
 
     const CREATE_USER = gql`
-        mutation createUser($userName: String!, $userPassword: String!, $userAdress: String!, $userZip: Int!) {
-            createUser(userName: $userName, userPassword: $userPassword, userAdress: $userAdress, userZip: $userZip) {
-                userId
-                userName
-                userAdress
-                userZip
-            }
+    mutation createUser($userName: String!, $userPassword: String!, $userAddress: String!, $userZip: Int!) {
+        createUser(userName: $userName, userPassword: $userPassword, userAddress: $userAddress, userZip: $userZip) {
+            userId
         }
-    `;
+    }
+`;
+
 
     const [createUserMutation] = useMutation(CREATE_USER);
+    
 
-    const handleCreateUser = async (newUser: { userName: string, userPassword: string, userAdress: string, userZip: number }) => {
+    const handleCreateUser = async (newUser: { userName: string, userPassword: string, userAddress: string, userZip: number }) => {
         console.log('Creating new user:', newUser);
         try {
             await createUserMutation({
-                variables: newUser
+                variables: {
+                    userName: newUser.userName,
+                    userPassword: newUser.userPassword,
+                    userAddress: newUser.userAddress,
+                    userZip: newUser.userZip as number
+                }
             });
+            console.log('User created successfully', newUser);
             // Redirect to login page after successful user creation
             navigate('/login');
         } catch (error) {

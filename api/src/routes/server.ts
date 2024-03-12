@@ -6,37 +6,14 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import { typeDefs, resolvers } from './schema.js';
-import {MongoClient, ServerApiVersion} from 'mongodb';
+import mongoose from 'mongoose';
 
 interface MyContext {
   token?: String;
 }
 
-const uri = "mongodb+srv://Sebbedeb:F1hlLGQztvPzqUwG@cluster0.vgyvlso.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
-
+await mongoose.connect('mongodb+srv://Sebbedeb:F1hlLGQztvPzqUwG@cluster0.vgyvlso.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"');
+console.log('Connected to MongoDB');
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -58,4 +35,3 @@ app.use(
 
 await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
 console.log(`🚀 Server ready at http://localhost:4000/graphql`);
-

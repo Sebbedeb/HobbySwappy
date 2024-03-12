@@ -1,7 +1,6 @@
 import { QueryResolvers } from '../resolvers/query.js';
 import { MutationResolvers } from '../resolvers/mutation.js';
 
-
 const typeDefs = `
   type Query {
     categories: [Category]
@@ -13,10 +12,12 @@ const typeDefs = `
     conversations(userId: Int!): [Conversation]
   }
   type Mutation {
-    createUser(userName: String!, userPassword: String!, userAdress: String!, userZip: Int!): User
+    createUser(userName: String!, userPassword: String!, userAddress: String!, userZip: Int!): User
     createWare(wareTitle: String!, wareDescription: String!, warePrice: Int!, wareCategory: String!, userId: Int!): Ware
     sendMessage(messageText: String!, messageSenderId: Int!, messageReceiverId: Int!): Message
-    editUser(userId: Int!, userName: String, userAdress: String, userZip: Int): User
+    editUser(userId: Int!, userName: String, userAddress: String, userZip: Int): User
+    createCategory(categoryName: String!, categoryDescription: String): Category
+    login(userName: String!, userPassword: String!): User
   }
 
   type Category {
@@ -28,7 +29,7 @@ const typeDefs = `
     userId: Int
     userName: String
     userPassword: String
-    userAdress: String
+    userAddress: String
     userZip: Int
   }
   type Message {

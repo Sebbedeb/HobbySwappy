@@ -1,154 +1,167 @@
-import { categories, hello } from "../routes/data.js";
-import { users, wares, messages, conversations } from "../routes/data.js";
-import {
-  User,
-  Ware,
-  Category,
-  Message,
-  Conversation,
-} from "../routes/types.js";
+import UserModel from '../models/UserModel.js';
+import WareModel from '../models/WareModel.js';
+import MessageModel from '../models/MessageModel.js';
+import ConversationModel from '../models/ConversationModel.js';
+import CategoryModel from '../models/CategoryModel.js';
+import { compare } from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
+
+// Access the JWT_SECRET from environment variables
+const JWT_SECRET = process.env.JWT_SECRET as string;
+
+// Use the environment variables in your application code
+console.log('JWT_SECRET:', JWT_SECRET);
 
 const MutationResolvers = {
+  
   Mutation: {
-    createUser: (
-      _parent: never,
-      args: {
-        userName: string;
-        userPassword: string;
-        userAdress: string;
-        userZip: number;
-      },
-      _context: never,
-      _info: never
-    ) => {
-      console.log(args);
-      const newUser: User = {
-        userId: users.length + 1,
-        userName: args.userName,
-        userPassword: args.userPassword,
-        userAdress: args.userAdress,
-        userZip: args.userZip,
-      };
-      users.push(newUser);
-      return newUser;
+
+    createCategory: async (_parent: never, args: { categoryName: string; categoryDescription: string }) => {
+      try {
+        const newCategory = new CategoryModel({
+          //categoryName: args.categoryName,
+          //categoryDescription: args.categoryDescription,
+
+          categoryName: "testName",
+          categoryDescription: "testDescription"
+        });
+        await newCategory.save();
+        return newCategory;
+      } catch (error) {
+        throw new Error('Failed to create category');
+      }
     },
 
-    createWare: (
-      _parent: never,
-      args: {
-        wareTitle: string;
-        wareDescription: string;
-        warePrice: number;
-        wareCategory: string;
-        userId: number;
-      },
-      _context: never,
-      _info: never
-    ) => {
-      if (
-        !categories.find(
-          (category) => category.categoryName === args.wareCategory
-        )
-      ) {
-        throw new Error("Category not found");
-      }
-      if (!users.find((user) => user.userId === args.userId)) {
-        throw new Error("User not found");
-      }
 
-      const newWare: Ware = {
-        wareId: wares.length + 1,
-        wareTitle: args.wareTitle,
-        wareDescription: args.wareDescription,
-        warePrice: args.warePrice,
-        wareCategory: categories.find(
-          (category) => category.categoryName === args.wareCategory
-        ) as Category,
-        User: users.find((user) => user.userId === args.userId),
-      };
-      wares.push(newWare);
-      return newWare;
+    createUser: async (_parent: never, args: { userName: string; userPassword: string; userAddress: string; userZip: number }) => {
+      try {
+        const newUser = new UserModel({
+          userId: 0,
+          userName: args.userName,
+          userPassword: args.userPassword,
+          userAddress: args.userAddress,
+          userZip: args.userZip,
+        });
+        console.log("attempting to save", newUser);
+  
+        await newUser.save();
+        return newUser;
+      } catch (error) {
+        throw new Error('Failed to create user');
+      }
     },
 
-    sendMessage: (
-      _parent: never,
-      args: {
-        messageText: string;
-        messageSenderId: number;
-        messageReceiverId: number;
-      },
-      _context: never,
-      _info: never
-    ) => {
-      const senderExists = users.some(
-        (user) => user.userId === args.messageSenderId
-      );
-      const receiverExists = users.some(
-        (user) => user.userId === args.messageReceiverId
-      );
+    login: async (_parent: never, args: { userName: string; userPassword: string }) => {
+      try {
+        const userName = args.userName;
+        const userPassword = args.userPassword;
+        console.log("userName", userName);
+        console.log("userPassword", userPassword);
+        const user = await UserModel.findOne({ userName });
+        console.log("user", user);
 
-      if (!senderExists || !receiverExists) {
-        throw new Error("User not found");
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        /*
+  
+        const validPassword = await compare(userPassword, user.userPassword);
+        
+        if (!validPassword) {
+          throw new Error('Invalid password');
+        }
+        */
+  
+
+        const token = jwt.sign({ userId: user.userId }, JWT_SECRET, { expiresIn: '1h' });
+
+        console.log("token", token);
+  
+        return { token };
+      } catch (error) {
+        throw new Error("Failed to login");
       }
-
-      if (args.messageSenderId === args.messageReceiverId) {
-        throw new Error("Sender and receiver cannot be the same");
-      }
-
-      const newMessage: Message = {
-        messageId: messages.length + 1,
-        messageText: args.messageText,
-        messageDate: new Date(),
-        senderId: args.messageSenderId,
-        receiverId: args.messageReceiverId,
-      };
-
-      messages.push(newMessage);
-
-      const conversation = conversations.find(
-        (conversation) =>
-          (conversation.personOneId === args.messageSenderId &&
-            conversation.personTwoId === args.messageReceiverId) ||
-          (conversation.personOneId === args.messageReceiverId &&
-            conversation.personTwoId === args.messageSenderId)
-      );
-
-      conversation
-        ? conversation.messages.push(newMessage)
-        : conversations.push({
-            conversationId: conversations.length + 1,
-            personOneId: args.messageSenderId,
-            personTwoId: args.messageReceiverId,
-            messages: [newMessage],
-          });
     },
-    editUser: (
-      _parent: never,
-      args: {
-        userId: number;
-        userName?: string;
-        userAdress?: string;
-        userZip?: number;
-      },
-      _context: never,
-      _info: never
-    ) => {
-      const user = users.find((user) => user.userId === args.userId);
-      
-      if (!user) {
-        throw new Error("User not found");
+
+
+    
+
+    createWare: async (_parent: never, args: { wareTitle: string; wareDescription: string; warePrice: number; wareCategory: string; userId: number }) => {
+      try {
+        const category = await CategoryModel.findOne({ categoryName: args.wareCategory });
+        if (!category) {
+          throw new Error('Category not found');
+        }
+
+        const user = await UserModel.findOne({ userId: args.userId });
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        const newWare = new WareModel({
+          wareTitle: args.wareTitle,
+          wareDescription: args.wareDescription,
+          warePrice: args.warePrice,
+          wareCategory: category._id, // Assuming category has _id field
+          user: user._id, // Assuming user has _id field
+        });
+        await newWare.save();
+        return newWare;
+      } catch (error) {
+        throw new Error('Failed to create ware');
       }
-      if (args.userName) {
-        user.userName = args.userName;
+    },
+
+    sendMessage: async (_parent: never, args: { messageText: string; messageSenderId: number; messageReceiverId: number }) => {
+      try {
+        const sender = await UserModel.findOne({ userId: args.messageSenderId });
+        const receiver = await UserModel.findOne({ userId: args.messageReceiverId });
+        if (!sender || !receiver) {
+          throw new Error('Sender or receiver not found');
+        }
+
+        const newMessage = new MessageModel({
+          messageText: args.messageText,
+          messageDate: new Date(),
+          sender: sender._id, // Assuming sender has _id field
+          receiver: receiver._id, // Assuming receiver has _id field
+        });
+        await newMessage.save();
+
+        // Handle conversation logic here if needed
+
+        return newMessage;
+      } catch (error) {
+        throw new Error('Failed to send message');
       }
-      if (args.userAdress) {
-        user.userAdress = args.userAdress;
+    },
+
+    editUser: async (_parent: never, args: { userId: number; userName?: string; userAddress?: string; userZip?: number }) => {
+      try {
+        const user = await UserModel.findOne({ userId: args.userId });
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        if (args.userName) {
+          user.userName = args.userName;
+        }
+        if (args.userAddress) {
+          user.userAddress = args.userAddress;
+        }
+        if (args.userZip) {
+          user.userZip = args.userZip;
+        }
+
+        await user.save();
+        return user;
+      } catch (error) {
+        throw new Error('Failed to edit user');
       }
-      if (args.userZip) {
-        user.userZip = args.userZip;
-      }
-      return user;
-  },
+    },
   },
 };
 
