@@ -7,6 +7,7 @@ import {
   InMemoryCache,
   ApolloProvider,
 } from "@apollo/client";
+import { UserProvider } from "./context/CurrentUserContext"; // Import UserProvider from your UserContext file
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -16,7 +17,9 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
+      <UserProvider> {/* Wrap the App component with UserProvider */}
         <App />
+      </UserProvider>
     </ApolloProvider>
   </React.StrictMode>
 );

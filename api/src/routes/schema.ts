@@ -16,6 +16,7 @@ const typeDefs = `
     createUser(userName: String!, userPassword: String!, userAdress: String!, userZip: Int!): User
     createWare(wareTitle: String!, wareDescription: String!, warePrice: Int!, wareCategory: String!, userId: Int!): Ware
     sendMessage(messageText: String!, messageSenderId: Int!, messageReceiverId: Int!): Message
+    editUser(userId: Int!, userName: String, userAdress: String, userZip: Int): User
   }
 
   type Category {

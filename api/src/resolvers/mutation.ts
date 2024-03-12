@@ -122,6 +122,33 @@ const MutationResolvers = {
             messages: [newMessage],
           });
     },
+    editUser: (
+      _parent: never,
+      args: {
+        userId: number;
+        userName?: string;
+        userAdress?: string;
+        userZip?: number;
+      },
+      _context: never,
+      _info: never
+    ) => {
+      const user = users.find((user) => user.userId === args.userId);
+      
+      if (!user) {
+        throw new Error("User not found");
+      }
+      if (args.userName) {
+        user.userName = args.userName;
+      }
+      if (args.userAdress) {
+        user.userAdress = args.userAdress;
+      }
+      if (args.userZip) {
+        user.userZip = args.userZip;
+      }
+      return user;
+  },
   },
 };
 

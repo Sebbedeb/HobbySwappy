@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, gql } from "@apollo/client";
-import { Route, Routes, useLocation } from 'react-router-dom';
-import ChatPage from './ChatPage';
-import MyWaresPage from './MyWares';
+import { useQuery, gql, useMutation } from "@apollo/client";
 import UserSideBar from '../components/UserSideBar';
 import UserInfo from '../components/UserInfo';
-import { Outlet } from 'react-router-dom';
-
-import '../styles/UserPage.css';
 
 const GET_USER = gql`
   query user($userId: Int!) {
     user(userId: $userId) {
+      userId
+      userName
+      userAdress
+      userZip
+    }
+  }
+`;
+
+const EDIT_USER = gql`
+  mutation editUser($userId: Int!, $userName: String, $userAdress: String, $userZip: Int) {
+    editUser(userId: $userId, userName: $userName, userAdress: $userAdress, userZip: $userZip) {
       userId
       userName
       userAdress
@@ -25,8 +30,7 @@ interface UserPageProps {
 }
 
 const UserPage: React.FC<UserPageProps> = ({ userId }) => {
-const [subPage, setSubPage] = useState("");
-  const location = useLocation();
+  const [subPage, setSubPage] = useState("");
   const [editedUser, setEditedUser] = useState({
     userId: 0,
     userName: "",
@@ -45,29 +49,38 @@ const [subPage, setSubPage] = useState("");
     }
   }, [data]);
 
-  const handleEditUser = (fieldName: string, value: string | number) => {
-    setEditedUser(prevState => ({
-      ...prevState,
-      [fieldName]: value
+  const [editUserMutation] = useMutation(EDIT_USER);
+
+  const handleEditUser = async (editedFields: { [key: string]: string | number }) => {
+    console.log('Submitting edited user:', editedFields);
+    await setEditedUser(prevState => ({
+        ...prevState,
+        ...editedFields
     }));
-  };
+
+    try {
+      console.log('Submitting edited user in mutation:', editedFields);
+        await editUserMutation({
+            variables: {
+                userId: editedUser.userId,
+                ...editedFields
+            }
+        });
+    } catch (error) {
+        console.error('Error editing user:', error);
+    }
+};
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :{error.message}</p>;
 
-  
-
   return (
     <div className="user-page-container">
-      <UserSideBar />
+      <UserSideBar setSubPage={setSubPage} />
       <div className="content">
-        <Outlet />
+        {subPage === "info" && <UserInfo user={editedUser} onEditUser={handleEditUser} />}
       </div>
-      <Routes>
-          <Route path="/user/info" element={<UserInfo user={editedUser} onEditUser={handleEditUser} />} />
-          <Route path="/user/chat" element={<ChatPage userId={userId} />} />
-          <Route path="/user/mywares" element={<MyWaresPage />} />
-        </Routes>
     </div>
   );
 }
