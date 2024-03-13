@@ -11,12 +11,18 @@ export interface User extends Document {
 }
 
 const UserSchema: Schema = new Schema({
-    userId: { type: Number, required: true },
+    userId: { type: Number, required: false },
     userName: { type: String, required: true },
     userPassword: { type: String, required: true },
     userAddress: { type: String, required: true },
     userZip: { type: Number, required: true },
-    wares: [{ type: Schema.Types.ObjectId, ref: 'Ware' }]
+    wares: [{ type: Number, ref: 'Ware'}]
+});
+
+// Define pre-save middleware to set the userId field to the size of the collection +1
+UserSchema.pre<User>('save', async function(next) {
+    this.userId = await this.collection.countDocuments() + 1;
+    next();
 });
 
 export default mongoose.model<User>('User', UserSchema);

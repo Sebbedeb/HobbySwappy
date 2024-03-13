@@ -20,9 +20,15 @@ enum CategoryName {
 }
 
 const CategorySchema: Schema = new Schema({
-    categoryId: { type: Number, required: true },
+    categoryId: { type: Number, required: false },
     categoryName: { type: String, enum: Object.values(CategoryName), required: true },
     categoryDescription: { type: String, required: true }
+});
+
+//pre save middleware to set the categoryId field to the size of the collection +1
+CategorySchema.pre<Category>('save', async function(next) {
+    this.categoryId = await this.collection.countDocuments() + 1;
+    next();
 });
 
 export default mongoose.model<Category>('Category', CategorySchema);

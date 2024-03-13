@@ -14,25 +14,22 @@ const MutationResolvers = {
     createCategory: async (_parent: never, args: { categoryName: string; categoryDescription: string }) => {
       try {
         const newCategory = new CategoryModel({
-          //categoryName: args.categoryName,
-          //categoryDescription: args.categoryDescription,
-
-          categoryName: "testName",
-          categoryDescription: "testDescription"
+          categoryName: args.categoryName,
+          categoryDescription: args.categoryDescription,
         });
         await newCategory.save();
         return newCategory;
       } catch (error) {
+        console.error('Error creating category:', error);
         throw new Error('Failed to create category');
       }
     },
+    
 
 
     createUser: async (_parent: never, args: { userName: string; userPassword: string; userAddress: string; userZip: number }) => {
       try {
-        const nextUserId = await UserModel.countDocuments() + 1;
         const newUser = new UserModel({
-          userId: nextUserId,
           userName: args.userName,
           userPassword: args.userPassword,
           userAddress: args.userAddress,
@@ -95,8 +92,8 @@ const MutationResolvers = {
           wareTitle: args.wareTitle,
           wareDescription: args.wareDescription,
           warePrice: args.warePrice,
-          wareCategory: category._id, // Assuming category has _id field
-          user: user._id, // Assuming user has _id field
+          wareCategory: category.id, 
+          userId: user.userId, 
         });
         await newWare.save();
         return newWare;
@@ -107,51 +104,50 @@ const MutationResolvers = {
 
     sendMessage: async (_parent: never, args: { messageText: string; messageSenderId: number; messageReceiverId: number }) => {
       try {
-        console.log("Attempting to send the following message", args);
         const sender = await UserModel.findOne({ userId: args.messageSenderId });
         const receiver = await UserModel.findOne({ userId: args.messageReceiverId });
         if (!sender || !receiver) {
-          throw new Error('Sender or receiver not found');
+          console.error('Sender or receiver not found');
         }
-    
+
         const newMessage = new MessageModel({
-          messageId: await MessageModel.countDocuments() + 1,
           messageText: args.messageText,
-          messageDate: new Date(),
-          senderId: sender.userId,
-          receiverId: receiver.userId,
+          senderId: args.messageSenderId,
+          receiverId: args.messageReceiverId,
         });
-        console.log("Attempting to save message", newMessage);
+        
+        console.log("attempting to save ", newMessage);
         await newMessage.save();
-    
-        // Update conversation
+        console.log("new Message saved: "+newMessage);
+
+
         let conversation = await ConversationModel.findOne({
           $or: [
-            { personOneId: sender.userId, personTwoId: receiver.userId },
-            { personOneId: receiver.userId, personTwoId: sender.userId }
+            { personOneId: args.messageSenderId, personTwoId: args.messageReceiverId },
+            { personOneId: args.messageReceiverId, personTwoId: args.messageSenderId }
           ]
         });
-    
+        
+
         if (!conversation) {
-          // Create new conversation if it doesn't exist
           conversation = new ConversationModel({
-            conversationId: await ConversationModel.countDocuments() + 1,
-            personOneId: sender.userId,
-            personTwoId: receiver.userId,
-            messages: [newMessage._id]
+            personOneId: args.messageSenderId,
+            personTwoId: args.messageReceiverId,
+            messages: [newMessage.messageId],
           });
         } else {
-          // Add message to existing conversation
-          conversation.messages.push(newMessage._id);
+          console.log("Found conversation: "+conversation);
+          conversation.messages.push(newMessage.messageId);
+          console.log("conversation after push: "+conversation);
         }
-    
+
+        console.log("attempting to save conversation: "+conversation);
         await conversation.save();
-    
-        // Handle conversation logic here if needed
-    
+        console.log("conversation saved: "+conversation);
+
         return newMessage;
       } catch (error) {
-        throw new Error('Failed to send message ' + error);
+        throw new Error('Failed to send message');
       }
     },
 

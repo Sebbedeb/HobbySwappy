@@ -4,7 +4,7 @@ type Ware = {
     wareDescription: string;
     warePrice: number;
     wareCategory: Category;
-    User?: User;
+    User?: number;
 }
 
 type User = {
@@ -13,7 +13,7 @@ type User = {
     userPassword: string;
     userAddress: string;
     userZip: number
-    wares?: Ware[];
+    wares?: number[];
 }
 
 type Message = {
@@ -28,7 +28,7 @@ type Conversation = {
     conversationId: number;
     personOneId: number;
     personTwoId: number;
-    messages: Message[];
+    messages: number[];
 }
 
 type Category = {

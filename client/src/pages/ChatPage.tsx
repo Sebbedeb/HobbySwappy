@@ -21,33 +21,39 @@ const ChatPage: React.FC = () => {
     }
   }, [userId, getAllConversations.data]);
 
+  const handleClickedConversation = (conversation: Conversation) => {
+    console.log('Clicked conversation:', conversation);
+    setActiveConversation(conversation);
+  };
+
   return (
     <div>
-      <h2>Chat Page</h2>
-      <div>
-        {conversations.map((conversation) => {
-          return (
-            <div>
-              {!activeConversation && (
-                <ul key={conversation.conversationId}>
-                  <li>
-                    <button onClick={() => setActiveConversation(conversation)}>
-                      ChatPartner: {conversation.personOneId === userId ? conversation.personTwoId : conversation.personOneId}
-                    </button>
-                  </li>
-                </ul>
-              )}
-              {activeConversation === conversation && (
-                <div>
-                  <Chat messages={activeConversation.messages} />
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+        <h2>Chat Page</h2>
+        <div>
+            {conversations.map((conversation) => {
+                return (
+                    <div key={conversation.conversationId}> {/* Add unique key prop here */}
+                        {!activeConversation && (
+                            <ul>
+                                <li>
+                                    ChatPartner:
+                                    <button onClick={() => handleClickedConversation(conversation)}>
+                                        {conversation.personOneId === userId ? conversation.personTwoId : conversation.personOneId}
+                                    </button>
+                                </li>
+                            </ul>
+                        )}
+                        {activeConversation && (
+                            <div>
+                                <Chat messageIds={activeConversation.messages} />
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
+        </div>
     </div>
-  );
+);
 }
 
 export default ChatPage;

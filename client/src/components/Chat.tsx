@@ -1,14 +1,18 @@
-import React from 'react';
-import { Message } from '../Types';
+import 
 
 interface ChatProps {
-    messages: Message[];
+    message: number[];
 }
 
 function Chat(chatProps: ChatProps) {
+
+
+
+
+
     return ( 
         <div>
-            Here is the chat
+            <h1>Bing Bong Chattid</h1>
         </div>
      );
 }
