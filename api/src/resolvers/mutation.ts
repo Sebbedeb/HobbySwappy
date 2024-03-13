@@ -5,6 +5,7 @@ import ConversationModel from '../models/ConversationModel.js';
 import CategoryModel from '../models/CategoryModel.js';
 import { compare } from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { conversations } from '../routes/data.js';
 
 const MutationResolvers = {
   
@@ -106,27 +107,55 @@ const MutationResolvers = {
 
     sendMessage: async (_parent: never, args: { messageText: string; messageSenderId: number; messageReceiverId: number }) => {
       try {
+        console.log("Attempting to send the following message", args);
         const sender = await UserModel.findOne({ userId: args.messageSenderId });
         const receiver = await UserModel.findOne({ userId: args.messageReceiverId });
         if (!sender || !receiver) {
           throw new Error('Sender or receiver not found');
         }
-
+    
         const newMessage = new MessageModel({
+          messageId: await MessageModel.countDocuments() + 1,
           messageText: args.messageText,
           messageDate: new Date(),
-          sender: sender._id, // Assuming sender has _id field
-          receiver: receiver._id, // Assuming receiver has _id field
+          senderId: sender.userId,
+          receiverId: receiver.userId,
         });
+        console.log("Attempting to save message", newMessage);
         await newMessage.save();
-
+    
+        // Update conversation
+        let conversation = await ConversationModel.findOne({
+          $or: [
+            { personOneId: sender.userId, personTwoId: receiver.userId },
+            { personOneId: receiver.userId, personTwoId: sender.userId }
+          ]
+        });
+    
+        if (!conversation) {
+          // Create new conversation if it doesn't exist
+          conversation = new ConversationModel({
+            conversationId: await ConversationModel.countDocuments() + 1,
+            personOneId: sender.userId,
+            personTwoId: receiver.userId,
+            messages: [newMessage._id]
+          });
+        } else {
+          // Add message to existing conversation
+          conversation.messages.push(newMessage._id);
+        }
+    
+        await conversation.save();
+    
         // Handle conversation logic here if needed
-
+    
         return newMessage;
       } catch (error) {
-        throw new Error('Failed to send message');
+        throw new Error('Failed to send message ' + error);
       }
     },
+
+
 
     editUser: async (_parent: never, args: { userId: number; userName?: string; userAddress?: string; userZip?: number }) => {
       try {

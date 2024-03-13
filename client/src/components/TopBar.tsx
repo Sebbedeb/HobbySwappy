@@ -16,7 +16,7 @@ const TopBar: React.FC = () => {
           {userId != 0 && userId ? ( // If userId exists (user is logged in), display User Page and other items
             <>
               <NavLink to="/user">User Page</NavLink>
-              <NavLink to="/">Dummy 2</NavLink>
+              <NavLink to="/chats">Chats</NavLink>
               <NavLink to="/">Dummy 3</NavLink>
             </>
           ) : ( // If userId does not exist (no user logged in), display SignUp and Login links
