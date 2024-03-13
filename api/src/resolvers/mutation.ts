@@ -5,14 +5,6 @@ import ConversationModel from '../models/ConversationModel.js';
 import CategoryModel from '../models/CategoryModel.js';
 import { compare } from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-dotenv.config();
-
-// Access the JWT_SECRET from environment variables
-const JWT_SECRET = process.env.JWT_SECRET as string;
-
-// Use the environment variables in your application code
-console.log('JWT_SECRET:', JWT_SECRET);
 
 const MutationResolvers = {
   
@@ -37,14 +29,14 @@ const MutationResolvers = {
 
     createUser: async (_parent: never, args: { userName: string; userPassword: string; userAddress: string; userZip: number }) => {
       try {
+        const nextUserId = await UserModel.countDocuments() + 1;
         const newUser = new UserModel({
-          userId: 0,
+          userId: nextUserId,
           userName: args.userName,
           userPassword: args.userPassword,
           userAddress: args.userAddress,
           userZip: args.userZip,
         });
-        console.log("attempting to save", newUser);
   
         await newUser.save();
         return newUser;
@@ -55,32 +47,29 @@ const MutationResolvers = {
 
     login: async (_parent: never, args: { userName: string; userPassword: string }) => {
       try {
+        const JWT_SECRET = process.env.JWT_SECRET as string;
         const userName = args.userName;
         const userPassword = args.userPassword;
-        console.log("userName", userName);
-        console.log("userPassword", userPassword);
+
         const user = await UserModel.findOne({ userName });
-        console.log("user", user);
 
         if (!user) {
           throw new Error('User not found');
         }
-
-        /*
   
-        const validPassword = await compare(userPassword, user.userPassword);
+        const validPassword: boolean = userPassword === user.userPassword
         
         if (!validPassword) {
           throw new Error('Invalid password');
         }
-        */
+        
   
 
         const token = jwt.sign({ userId: user.userId }, JWT_SECRET, { expiresIn: '1h' });
 
         console.log("token", token);
   
-        return { token };
+        return { token, userId: user.userId};
       } catch (error) {
         throw new Error("Failed to login");
       }

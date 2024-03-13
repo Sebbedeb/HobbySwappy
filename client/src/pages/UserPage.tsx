@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, gql, useMutation } from "@apollo/client";
 import UserSideBar from '../components/UserSideBar';
 import UserInfo from '../components/UserInfo';
+import { useUserContext } from '../context/CurrentUserContext';
+
+
 
 const GET_USER = gql`
   query user($userId: Int!) {
@@ -25,11 +28,8 @@ const EDIT_USER = gql`
   }
 `;
 
-interface UserPageProps {
-  userId: number;
-}
-
-const UserPage: React.FC<UserPageProps> = ({ userId }) => {
+const UserPage: React.FC = () => {
+  const { userId } = useUserContext();
   const [subPage, setSubPage] = useState("");
   const [editedUser, setEditedUser] = useState({
     userId: 0,

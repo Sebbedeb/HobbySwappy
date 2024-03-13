@@ -7,6 +7,10 @@ import http from 'http';
 import cors from 'cors';
 import { typeDefs, resolvers } from './schema.js';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+await dotenv.config();
+
+console.log(process.env.JWT_SECRET);
 
 interface MyContext {
   token?: String;

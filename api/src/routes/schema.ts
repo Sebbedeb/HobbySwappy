@@ -17,9 +17,14 @@ const typeDefs = `
     sendMessage(messageText: String!, messageSenderId: Int!, messageReceiverId: Int!): Message
     editUser(userId: Int!, userName: String, userAddress: String, userZip: Int): User
     createCategory(categoryName: String!, categoryDescription: String): Category
-    login(userName: String!, userPassword: String!): User
+    login(userName: String!, userPassword: String!): UserCredentials
   }
+  
 
+  type UserCredentials {
+    token: String
+    userId: Int
+  }
   type Category {
     categoryId: Int
     categoryName: String
