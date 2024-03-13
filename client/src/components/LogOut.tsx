@@ -1,7 +1,14 @@
+import { useUserContext } from "../context/CurrentUserContext";
+
 function LogOut() {
+    const { setUserId } = useUserContext();
     return ( 
         <div>
-            <h1>LOGOUT</h1>
+            <button onClick={() => {
+                localStorage.removeItem('token');
+                setUserId(0);
+                window.location.reload();
+            }}>Log Out</button>
         </div>
      );
 }

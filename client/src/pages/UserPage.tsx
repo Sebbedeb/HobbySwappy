@@ -1,32 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import UserSideBar from '../components/UserSideBar';
 import UserInfo from '../components/UserInfo';
 import { useUserContext } from '../context/CurrentUserContext';
+import { GET_USER, EDIT_USER } from '../services/UserServices';
 
-
-
-const GET_USER = gql`
-  query user($userId: Int!) {
-    user(userId: $userId) {
-      userId
-      userName
-      userAdress
-      userZip
-    }
-  }
-`;
-
-const EDIT_USER = gql`
-  mutation editUser($userId: Int!, $userName: String, $userAdress: String, $userZip: Int) {
-    editUser(userId: $userId, userName: $userName, userAdress: $userAdress, userZip: $userZip) {
-      userId
-      userName
-      userAdress
-      userZip
-    }
-  }
-`;
 
 const UserPage: React.FC = () => {
   const { userId } = useUserContext();
@@ -35,7 +13,7 @@ const UserPage: React.FC = () => {
     userId: 0,
     userName: "",
     userPassword: "",
-    userAdress: "",
+    userAddress: "",
     userZip: 0,
   });
 

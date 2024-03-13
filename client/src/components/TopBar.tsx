@@ -13,7 +13,7 @@ const TopBar: React.FC = () => {
           <NavLink to="/">
             <img src="images/HobbySwappy.png" className='logo' alt="logo" />
           </NavLink>
-          {userId ? ( // If userId exists (user is logged in), display User Page and other items
+          {userId != 0 && userId ? ( // If userId exists (user is logged in), display User Page and other items
             <>
               <NavLink to="/user">User Page</NavLink>
               <NavLink to="/">Dummy 2</NavLink>

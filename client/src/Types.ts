@@ -11,7 +11,7 @@ type User = {
     userId: number;
     userName: string;
     userPassword: string;
-    userAdress: string;
+    userAddress: string;
     userZip: number
     wares?: Ware[];
 }

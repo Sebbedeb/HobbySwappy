@@ -43,7 +43,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, onEditUser }) => {
                     </div>
                     <div>
                         <label htmlFor="userAdress">Address: </label>
-                        <input type="text" id="userAdress" value={editedUser.userAdress} onChange={(e) => handleInputChange('userAdress', e.target.value)} />
+                        <input type="text" id="userAddress" value={editedUser.userAddress} onChange={(e) => handleInputChange('userAddress', e.target.value)} />
                     </div>
                     <div>
                         <label htmlFor="userZip">Zip: </label>
@@ -55,7 +55,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ user, onEditUser }) => {
             ) : (
                 <div>
                     <p>Username: {user.userName} <button onClick={handleEditClick}>Edit</button></p>
-                    <p>Address: {user.userAdress} <button onClick={handleEditClick}>Edit</button></p>
+                    <p>Address: {user.userAddress} <button onClick={handleEditClick}>Edit</button></p>
                     <p>Zip: {user.userZip} <button onClick={handleEditClick}>Edit</button></p>
                 </div>
             )}
