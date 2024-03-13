@@ -2,6 +2,7 @@ import UserModel from '../models/UserModel.js';
 import WareModel from '../models/WareModel.js';
 import ConversationModel from '../models/ConversationModel.js';
 import CategoryModel from '../models/CategoryModel.js';
+import MessageModel from '../models/MessageModel.js';
 
 const QueryResolvers = {
   Query: {
@@ -67,7 +68,21 @@ const QueryResolvers = {
         throw new Error('Failed to fetch conversations');
       }
     },
+
+    messages: async (_parent: never, args: { conversationId: number }) => {
+      try {
+        const conversation = await ConversationModel.findOne({ conversationId: args.conversationId });
+        console.log("Found Convo: "+conversation);
+        if (!conversation) {
+          throw new Error('Conversation not found');
+        }
+        const messages = await MessageModel.find({ messageId: { $in: conversation.messages } });
+        return messages;
+      } catch (error) {
+        throw new Error('Failed to fetch messages');
+      }
+    }
   }
-}
+};
 
 export { QueryResolvers };

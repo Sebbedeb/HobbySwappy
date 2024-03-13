@@ -35,11 +35,15 @@ const MutationResolvers = {
           userAddress: args.userAddress,
           userZip: args.userZip,
         });
+
+        if( await UserModel.findOne({userName: args.userName})){
+          throw new Error('User already exists');
+        }
   
         await newUser.save();
         return newUser;
       } catch (error) {
-        throw new Error('Failed to create user');
+        console.error('Error creating user:', error);
       }
     },
 

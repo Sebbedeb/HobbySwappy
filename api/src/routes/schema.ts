@@ -10,6 +10,7 @@ type Query {
   ware(wareId: Int!): Ware
   conversation(conversationId: Int!): Conversation
   conversations(userId: Int!): [Conversation]
+  messages(conversationId: Int!): [Message]
 }
 
 type Mutation {
