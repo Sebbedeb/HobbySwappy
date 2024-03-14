@@ -5,6 +5,8 @@ import ConversationModel from '../models/ConversationModel.js';
 import CategoryModel from '../models/CategoryModel.js';
 import { compare } from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+
 import { conversations } from '../routes/data.js';
 
 const MutationResolvers = {

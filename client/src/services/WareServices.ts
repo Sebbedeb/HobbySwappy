@@ -15,3 +15,16 @@ export const GET_WARES = gql`
   }
 `;
 
+export const GET_WARE = gql`
+  query GetWare($wareId: Int!) {
+    ware(wareId: $wareId) {
+        imgName
+        wareCategory
+        wareDescription
+        wareId
+        warePrice
+        wareTitle
+        userId
+    }
+  }
+`;

@@ -5,6 +5,8 @@ import UserSignUp from './pages/UserSignUp';
 import Login from './pages/Login';
 import ChatPage from './pages/ChatPage';
 import WarePage from './pages/WarePage';
+import Ware from './pages/Ware';
+
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path='/chats' element={<ChatPage />} />
         <Route path='/wares' element={<WarePage />} />
+        <Route path='/ware/:wareId' element={<Ware />} />
         </Route>
       </Routes>
     </Router>

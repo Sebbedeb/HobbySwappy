@@ -11,3 +11,17 @@ query Query($conversationId: Int!) {
   }
 }
 `;
+
+export const SEND_MESSAGE = gql`
+mutation SendMessage($messageText: String!, $messageSenderId: Int!, $messageReceiverId: Int!) {
+  sendMessage(messageText: $messageText, messageSenderId: $messageSenderId, messageReceiverId: $messageReceiverId) {
+    messageId
+    messageText
+    messageDate
+    senderId
+    receiverId
+  }
+}
+`;
+
+
