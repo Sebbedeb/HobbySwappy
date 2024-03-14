@@ -17,7 +17,7 @@ const TopBar: React.FC = () => {
             <>
               <NavLink to="/user">User Page</NavLink>
               <NavLink to="/chats">Chats</NavLink>
-              <NavLink to="/">Dummy 3</NavLink>
+              <NavLink to="/wares">Browse Wares</NavLink>
               <NavLink to="/login">Login/Out</NavLink>
             </>
           ) : ( // If userId does not exist (no user logged in), display SignUp and Login links

@@ -4,6 +4,7 @@ import UserPage from './pages/UserPage';
 import UserSignUp from './pages/UserSignUp';
 import Login from './pages/Login';
 import ChatPage from './pages/ChatPage';
+import WarePage from './pages/WarePage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signup" element={<UserSignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path='/chats' element={<ChatPage />} />
+        <Route path='/wares' element={<WarePage />} />
         </Route>
       </Routes>
     </Router>

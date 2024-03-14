@@ -7,8 +7,9 @@ export interface Ware extends Document {
     wareTitle: string;
     wareDescription: string;
     warePrice: number;
-    wareCategory: Category;
-    user?: User;
+    wareCategory: number;
+    userId?: number;
+    imgName?: string;
 }
 
 const WareSchema: Schema = new Schema({
@@ -16,13 +17,18 @@ const WareSchema: Schema = new Schema({
     wareTitle: { type: String, required: true },
     wareDescription: { type: String, required: true },
     warePrice: { type: Number, required: true },
-    wareCategory: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
-    userId: { type: Number, ref: 'UserId', required: true }
+    wareCategory: { type: Number, ref: 'Category', required: true },
+    userId: { type: Number, ref: 'UserId', required: true },
+    imgName: { type: String, required: false }
+
 });
 
 // Define pre-save middleware to set the wareId field to the size of the collection +1
 WareSchema.pre<Ware>('save', async function(next) {
     this.wareId = await this.collection.countDocuments() + 1;
+    if(this.imgName === undefined) {
+        this.imgName = "DefaultWarePhoto.png";
+    }
     next();
 });
 

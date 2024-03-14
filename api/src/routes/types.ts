@@ -5,6 +5,7 @@ type Ware = {
     warePrice: number;
     wareCategory: Category;
     User?: User;
+    imgPath?: string;
 }
 
 type User = {

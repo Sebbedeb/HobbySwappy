@@ -80,14 +80,16 @@ const MutationResolvers = {
 
     
 
-    createWare: async (_parent: never, args: { wareTitle: string; wareDescription: string; warePrice: number; wareCategory: string; userId: number }) => {
+    createWare: async (_parent: never, args: { wareTitle: string; wareDescription: string; warePrice: number; wareCategory: string; userId: number, imgName?: string }) => {
       try {
-        const category = await CategoryModel.findOne({ categoryName: args.wareCategory });
+        const category = await CategoryModel.findOne({ categoryId: args.wareCategory });
+        console.log("category: "+category);
         if (!category) {
           throw new Error('Category not found');
         }
 
         const user = await UserModel.findOne({ userId: args.userId });
+        console.log("user: "+user);
         if (!user) {
           throw new Error('User not found');
         }
@@ -96,12 +98,18 @@ const MutationResolvers = {
           wareTitle: args.wareTitle,
           wareDescription: args.wareDescription,
           warePrice: args.warePrice,
-          wareCategory: category.id, 
+          wareCategory: category.categoryId, 
           userId: user.userId, 
+          imgName: args.imgName
         });
+
+
+        console.log("Attempting to save "+newWare)
         await newWare.save();
+        console.log("newWare saved: "+newWare);
         return newWare;
       } catch (error) {
+        console.error('Error creating ware:', error);
         throw new Error('Failed to create ware');
       }
     },

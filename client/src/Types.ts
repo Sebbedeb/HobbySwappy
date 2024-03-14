@@ -3,8 +3,9 @@ type Ware = {
     wareTitle: string;
     wareDescription: string;
     warePrice: number;
-    wareCategory: Category;
-    User?: number;
+    wareCategory: number;
+    UserId?: number;
+    imgName?: string;
 }
 
 type User = {

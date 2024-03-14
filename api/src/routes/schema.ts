@@ -5,7 +5,7 @@ const typeDefs = `
 type Query {
   categories: [Category]
   users: [User]
-  wares: [Ware]
+  wares(categoryId: Int): [Ware]
   user(userId: Int!): User
   ware(wareId: Int!): Ware
   conversation(conversationId: Int!): Conversation
@@ -15,7 +15,7 @@ type Query {
 
 type Mutation {
   createUser(userName: String!, userPassword: String!, userAddress: String!, userZip: Int!): User
-  createWare(wareTitle: String!, wareDescription: String!, warePrice: Int!, wareCategory: Int!, userId: Int!): Ware
+  createWare(wareTitle: String!, wareDescription: String!, warePrice: Int!, wareCategory: Int!, userId: Int!, imgName: String): Ware
   sendMessage(messageText: String!, messageSenderId: Int!, messageReceiverId: Int!): Message
   editUser(userId: Int!, userName: String, userAddress: String, userZip: Int): User
   createCategory(categoryName: String!, categoryDescription: String!): Category
@@ -47,8 +47,9 @@ type Ware {
   wareTitle: String
   wareDescription: String
   warePrice: Int
-  wareCategory: Category
-  user: User
+  wareCategory: Int
+  userId: Int
+  imgName: String
 }
 
 type Message {

@@ -33,11 +33,15 @@ const QueryResolvers = {
       }
     },
 
-    wares: async () => {
+    wares: async (_parent: never, args: {categoryId: number}) => {
       try {
-        const wares = await WareModel.find();
-        return wares;
-      } catch (error) {
+        if (args.categoryId) {
+          return await WareModel.find({ wareCategory: args.categoryId });
+        }
+        else {
+        return await WareModel.find();
+      }
+     } catch (error) {
         throw new Error('Failed to fetch wares');
       }
     },

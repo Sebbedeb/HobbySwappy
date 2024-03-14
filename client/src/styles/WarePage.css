@@ -1,0 +1,28 @@
+.waresContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 70%;
+}
+
+.wareItem {
+    width: calc(33.33% - 40px); /* 33.33% width for each item with some space between */
+    margin-bottom: 40px; /* Set the bottom margin to 40px */
+
+}
+
+.wareContainer {
+    width: 100%;
+    max-width: 100%;
+}
+
+.warePhoto img {
+    width: 100%; /* Set the image width to 100% of its container */
+    height: auto; /* Ensure the aspect ratio of the image is maintained */
+}
+
+.warePrice,
+.wareTitle {
+    font-size: 1.5em; /* Set the font size to 1.5em */
+    color: #f12c9f; /* Set the text color to #be1841 */
+}

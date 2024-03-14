@@ -7,7 +7,7 @@ export interface User extends Document {
     userPassword: string;
     userAddress: string;
     userZip: number;
-    wares?: Ware[];
+    wares?: number[];
 }
 
 const UserSchema: Schema = new Schema({
