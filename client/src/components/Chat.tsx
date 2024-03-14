@@ -14,9 +14,20 @@ function Chat(chatProps: ChatProps) {
     const [senderId, setSenderId] = React.useState<number | null>(null);
     const [receiverId, setReceiverId] = React.useState<number | null>(null);
 
-    const { data, loading, error } = useQuery(GET_MESSAGES, {
+    const { data, loading, error, refetch } = useQuery(GET_MESSAGES, {
         variables: { conversationId: chatProps.conversationId },
     });
+
+    React.useEffect(() => {
+        const intervalId = setInterval(() => {
+            console.log('Refetching messages');
+            refetch();
+        }, 1000); // Refetch every 1 second
+
+        return () => clearInterval(intervalId); // Cleanup interval on unmount
+
+    }, [refetch]);
+
 
     React.useEffect(() => {
         if (loading) {
@@ -38,6 +49,8 @@ function Chat(chatProps: ChatProps) {
 
 
     }, [chatProps.conversationId, data, error, loading]);
+
+
 
     return (
         <div>
