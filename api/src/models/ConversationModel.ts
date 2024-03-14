@@ -17,8 +17,11 @@ const ConversationSchema: Schema = new Schema({
 
 // Define pre-save middleware to set the conversationId field to the size of the collection +1
 ConversationSchema.pre<Conversation>('save', async function(next) {
+    if(this.conversationId === undefined) {
     console.log('pre save middleware' + await this.collection.countDocuments());
     this.conversationId = await this.collection.countDocuments() + 1;
+    }
+
     next();
 });
 
