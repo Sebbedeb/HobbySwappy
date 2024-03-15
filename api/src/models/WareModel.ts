@@ -25,7 +25,16 @@ const WareSchema: Schema = new Schema({
 
 // Define pre-save middleware to set the wareId field to the size of the collection +1
 WareSchema.pre<Ware>('save', async function(next) {
-    this.wareId = await this.collection.countDocuments() + 1;
+    if(this.wareId === undefined)
+    {
+        let highestId  = await this.collection.countDocuments() + 1;
+        //while the found wareId is not unique, increment the wareId and check again
+        while(await this.collection.findOne({wareId: highestId}) !== null)
+        {
+            highestId++;
+        }
+        this.wareId = highestId;
+    }
     if(this.imgName === undefined) {
         this.imgName = "DefaultWarePhoto.png";
     }
