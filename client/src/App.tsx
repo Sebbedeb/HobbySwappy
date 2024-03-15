@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import ChatPage from './pages/ChatPage';
 import WarePage from './pages/WarePage';
 import Ware from './pages/Ware';
+import MyWares from './pages/MyWares';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path='/chats' element={<ChatPage />} />
         <Route path='/wares' element={<WarePage />} />
         <Route path='/ware/:wareId' element={<Ware />} />
+        <Route path='/mywares' element={<MyWares />} />
         </Route>
       </Routes>
     </Router>

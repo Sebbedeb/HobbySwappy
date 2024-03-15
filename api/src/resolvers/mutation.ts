@@ -7,6 +7,7 @@ import { compare } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
+
 import { conversations } from '../routes/data.js';
 
 const MutationResolvers = {
@@ -113,6 +114,50 @@ const MutationResolvers = {
       } catch (error) {
         console.error('Error creating ware:', error);
         throw new Error('Failed to create ware');
+      }
+    },
+
+    editWare: async (_parent: never, args: { wareId: number; wareTitle?: string; wareDescription?: string; warePrice?: number; wareCategory?: number; imgName?: string }) => {
+      try {
+        const ware = await WareModel.findOne({ wareId: args.wareId });
+        if (!ware) {
+          throw new Error('Ware not found');
+        }
+
+        if (args.wareTitle) {
+          ware.wareTitle = args.wareTitle;
+        }
+        if (args.wareDescription) {
+          ware.wareDescription = args.wareDescription;
+        }
+        if (args.warePrice) {
+          ware.warePrice = args.warePrice;
+        }
+        if (args.wareCategory) {
+          ware.wareCategory = args.wareCategory;
+        }
+        if (args.imgName) {
+          ware.imgName = args.imgName;
+        }
+
+        await ware.save();
+        return ware;
+      } catch (error) {
+        throw new Error('Failed to edit ware');
+      }
+    },
+
+    deleteWare: async (_parent: never, args: { wareId: number }) => {
+      try {
+        const ware = await WareModel.findOne({ wareId: args.wareId });
+        if (!ware) {
+          throw new Error('Ware not found');
+        }
+
+        await ware.deleteOne();
+        return ware;
+      } catch (error) {
+        throw new Error('Failed to delete ware');
       }
     },
 

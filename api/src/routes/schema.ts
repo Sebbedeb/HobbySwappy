@@ -11,6 +11,7 @@ type Query {
   conversation(conversationId: Int!): Conversation
   conversations(userId: Int!): [Conversation]
   messages(conversationId: Int!): [Message]
+  waresByUserId(userId: Int!): [Ware]
 }
 
 type Mutation {
@@ -20,6 +21,8 @@ type Mutation {
   editUser(userId: Int!, userName: String, userAddress: String, userZip: Int): User
   createCategory(categoryName: String!, categoryDescription: String!): Category
   login(userName: String!, userPassword: String!): UserCredentials
+  editWare(wareId: Int!, wareTitle: String, wareDescription: String, warePrice: Int, wareCategory: Int, imgName: String): Ware
+  deleteWare(wareId: Int!): Ware
 }
 
 type UserCredentials {

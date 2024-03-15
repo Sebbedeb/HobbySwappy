@@ -46,6 +46,15 @@ const QueryResolvers = {
       }
     },
 
+    waresByUserId: async (_parent: never, args: { userId: number }) => {
+      try {
+        const wares = await WareModel.find({ userId: args.userId });
+        return wares;
+      } catch (error) {
+        throw new Error('Failed to fetch wares');
+      }
+    },
+
     ware: async (_parent: never, args: { wareId: number }) => {
       try {
         const ware = await WareModel.findOne({ wareId: args.wareId });

@@ -17,8 +17,7 @@ const UserSideBar: React.FC<UserSideBarProps> = ({ setSubPage }) => {
     <div className="sidebar">
       <ul>
         <li><NavLink to="/user/info" onClick={() => handleSubPageSelect("info")}>Info</NavLink></li>
-        <li><NavLink to="/user/chat" onClick={() => handleSubPageSelect("chat")}>Chat</NavLink></li>
-        <li><NavLink to="/user/mywares" onClick={() => handleSubPageSelect("mywares")}>My Wares</NavLink></li>
+        <li><NavLink to="/mywares" onClick={() => handleSubPageSelect("mywares")}>My Wares</NavLink></li>
       </ul>
     </div>
   );

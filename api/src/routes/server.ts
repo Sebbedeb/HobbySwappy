@@ -16,7 +16,7 @@ interface MyContext {
   token?: String;
 }
 
-await mongoose.connect('mongodb+srv://Sebbedeb:F1hlLGQztvPzqUwG@cluster0.vgyvlso.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"');
+await mongoose.connect(process.env.MONGO_CONNECT_STRING as string);
 console.log('Connected to MongoDB');
 
 const app = express();
