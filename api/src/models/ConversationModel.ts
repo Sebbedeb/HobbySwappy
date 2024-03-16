@@ -1,18 +1,18 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { Message } from './MessageModel';
 
 export interface Conversation extends Document {
     conversationId: number;
     personOneId: number;
     personTwoId: number;
     messages: number[];
+    lastUpdated: Date;
 }
 
 const ConversationSchema: Schema = new Schema({
     conversationId: { type: Number, required: false },
     personOneId: { type: Number, required: true },
     personTwoId: { type: Number, required: true },
-    messages: [{ type: Number, ref: 'Message' }]
+    messages: [{ type: Number, ref: 'Message' }],
 });
 
 // Define pre-save middleware to set the conversationId field to the size of the collection +1
