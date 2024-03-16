@@ -4,8 +4,12 @@ import { GET_CONVERSATIONS } from '../services/ConversationsServices';
 import { useQuery } from '@apollo/client';
 import { Conversation } from '../Types';
 import Chat from '../components/Chat';
+import RouteProtector from '../routes/RouteProtector';
 
 const ChatPage: React.FC = () => {
+
+  RouteProtector();
+
   const userId = useUserContext().userId;
 
   const { loading, error, data } = useQuery(GET_CONVERSATIONS, {

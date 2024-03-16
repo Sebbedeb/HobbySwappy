@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Ware } from "../Types";
 import "../styles/WarePage.css";
 import { useNavigate } from "react-router-dom";
+import DisplayWare from "../components/DisplayWare";
 
 function WarePage() {
     const [categoryId, setCategoryId] = useState<number>(0);
@@ -45,21 +46,11 @@ function WarePage() {
 
             {/* display the wares as a clickable photo and title with a price underneath */}
             <div className="waresContainer">
+            
                 {data && data.wares.map((ware: Ware) => (
-                    <div key={ware.wareId} className="wareItem" >
-                        <div className="wareContainer" onClick={(event) => handleClick(event, ware.wareId)}>
-                            <div className='warePhoto'>
-                                {ware.imgName !== "DefaultWarePhoto.png" ? (
-                                    <img src={ware.imgName} alt={ware.wareTitle} />
-                                ) : (
-                                    <img src="images/DefaultWarePhoto.png" alt={ware.wareTitle} />
-                                )}
-                            </div>
-                            <div className='wareTitle'>{ware.wareTitle}</div>
-                            <div className='warePrice'>${ware.warePrice}</div>
-                        </div>
-                    </div>
+                    <DisplayWare ware={ware} handleClick={handleClick} />
                 ))}
+
             </div>
         </div>
     );

@@ -4,9 +4,13 @@ import UserSideBar from '../components/UserSideBar';
 import UserInfo from '../components/UserInfo';
 import { useUserContext } from '../context/CurrentUserContext';
 import { GET_USER, EDIT_USER } from '../services/UserServices';
+import RouteProtector from '../routes/RouteProtector';
 
 
 const UserPage: React.FC = () => {
+
+  RouteProtector();
+
   const { userId } = useUserContext();
   const [subPage, setSubPage] = useState("");
   const [editedUser, setEditedUser] = useState({

@@ -6,8 +6,11 @@ import { Ware } from '../Types';
 import DisplayWare from '../components/DisplayWare';
 import EditWare from '../components/EditWare';
 import CreateWare from '../components/CreateWare';
+import RouteProtector from '../routes/RouteProtector';
 
 const MyWares = () => {
+
+  RouteProtector();
   const userId = parseInt(localStorage.getItem('userId') || '0', 10); // Use radix 10
 
   const [openWareId, setOpenWareId] = useState<number>(0);
@@ -43,6 +46,9 @@ const MyWares = () => {
   return (
     <div>
       <h2>My Wares Page</h2>
+      {openWareId !== -1 && <button onClick={() => setOpenWareId(-1)}>Create New Ware</button>}
+         {openWareId === -1 && (<CreateWare setOpenWareId={setOpenWareId} />)}
+
 
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
@@ -58,8 +64,7 @@ const MyWares = () => {
           )
         ))}
         
-        {openWareId !== -1 && <button onClick={() => setOpenWareId(-1)}>Create New Ware</button>}
-         {openWareId === -1 && (<CreateWare setOpenWareId={setOpenWareId} />)}
+
       </div>
     </div>
   );

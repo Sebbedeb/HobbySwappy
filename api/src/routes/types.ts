@@ -4,7 +4,7 @@ type Ware = {
     wareDescription: string;
     warePrice: number;
     wareCategory: Category;
-    User?: User;
+    userId?: number;
     imgPath?: string;
 }
 

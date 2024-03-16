@@ -3,8 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { GET_WARE } from '../services/WareServices';
 import { useQuery, useMutation } from '@apollo/client';
 import { SEND_MESSAGE } from '../services/MessageServices';
+import RouteProtector from '../routes/RouteProtector';
 
 function Ware() {
+
+    RouteProtector();
+
     const navigate = useNavigate(); // Use useNavigate directly in Ware component
     const [sendMessageMutation] = useMutation(SEND_MESSAGE);
 
