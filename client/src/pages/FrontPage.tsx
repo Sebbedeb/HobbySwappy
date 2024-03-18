@@ -7,6 +7,7 @@ import { User } from '../Types';
 import { GET_USER } from '../services/UserServices';
 import { useQuery } from '@apollo/client';
 import SwappiesNearYou from '../components/SwappiesNearYou';
+import AnimatedTitle from '../components/AnimatedTitle';
 
 const FrontPage: React.FC = () => {
 
@@ -46,11 +47,12 @@ const FrontPage: React.FC = () => {
 
   return (
     <div className="frontpage-container">
-
-      <h1>Welcome to Hobby Swappy!</h1>
+      <h1>Hello, {user.userName}!</h1>
+      <h2>Welcome to</h2>
+      <AnimatedTitle />
       {userId ? ( // If userId exists (user is logged in), show a greeting
         <div>
-          <h2>Hello, {user.userName}!</h2>
+
 
           <SwappiesNearYou />
         </div>
