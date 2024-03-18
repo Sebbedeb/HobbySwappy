@@ -21,6 +21,7 @@ MessageSchema.pre<Message>('save', async function(next) {
     this.messageDate = new Date();
     this.messageId = await this.collection.countDocuments() + 1;
     console.log(this.messageId);
+
     next();
 });
 

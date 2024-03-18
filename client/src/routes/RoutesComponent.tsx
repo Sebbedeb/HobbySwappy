@@ -8,6 +8,7 @@ import ChatPage from '../pages/ChatPage';
 import WarePage from '../pages/WarePage';
 import Ware from '../pages/Ware';
 import MyWares from '../pages/MyWares';
+import ErrorPageComponent from '../components/ErrorPageComponent';
 
 function RoutesComponent() {
 
@@ -23,6 +24,7 @@ function RoutesComponent() {
           <Route path='/wares' element={<WarePage />} />
           <Route path='/ware/:wareId' element={<Ware />} />
           <Route path='/mywares' element={<MyWares />} />
+          <Route path='/errorPage' element={<ErrorPageComponent />} />
         </Route>
       </Routes>
     </Router>
