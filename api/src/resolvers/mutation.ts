@@ -208,25 +208,6 @@ const MutationResolvers = {
     },
 
 
-    updateConversation: async (_parent: never, args: { conversationId: number; userId: number, newMessage: boolean }) => {
-      try {
-        const conversation = await ConversationModel.findOne({ conversationId: args.conversationId });
-        if (!conversation) {
-          throw new Error('Conversation not found');
-        }
-
-        if(args.newMessage){
-          conversation.lastUpdated = new Date();
-        }
-
-        await conversation.save();
-        return conversation;
-      } catch (error) {
-        throw new Error('Failed to update conversation');
-      }
-    },
-
-
 
     editUser: async (_parent: never, args: { userId: number; userName?: string; userAddress?: string; userZip?: number }) => {
       try {

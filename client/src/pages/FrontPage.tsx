@@ -1,11 +1,12 @@
 import React from 'react';
 import '../styles/FrontPage.css';
 import { NavLink } from 'react-router-dom';
-import { useUserContext } from '../context/CurrentUserContext'; 
+import { useUserContext } from '../context/CurrentUserContext';
 import { useState, useEffect } from 'react';
 import { User } from '../Types';
 import { GET_USER } from '../services/UserServices';
 import { useQuery } from '@apollo/client';
+import SwappiesNearYou from '../components/SwappiesNearYou';
 
 const FrontPage: React.FC = () => {
 
@@ -17,7 +18,7 @@ const FrontPage: React.FC = () => {
     userAddress: '',
     userZip: 0,
   };
-  
+
   const [user, setUser] = useState<User>(emptyUser);
 
   const { loading, error, data } = useQuery(GET_USER, {
@@ -28,28 +29,31 @@ const FrontPage: React.FC = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      if(userId !== 0 && userId !== null) {
-      try {
-        const userData: User = data.user;
-        if (!userData) {
-          throw new Error('User not found');
+      if (userId !== 0 && userId !== null) {
+        try {
+          const userData: User = data.user;
+          if (!userData) {
+            throw new Error('User not found');
+          }
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
         }
-        setUser(userData);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
       }
-    }
     };
-      fetchUser(); // Fetch user data only if userId exists
-  }, [userId , data]);
+    fetchUser(); // Fetch user data only if userId exists
+  }, [userId, data]);
 
   return (
     <div className="frontpage-container">
-      <h1>Welcome to the Front Page!</h1>
-      <p>This is the content of the front page.</p>
-      
+
+      <h1>Welcome to Hobby Swappy!</h1>
       {userId ? ( // If userId exists (user is logged in), show a greeting
-        <p>Hello, {user.userName}!</p>
+        <div>
+          <h2>Hello, {user.userName}!</h2>
+
+          <SwappiesNearYou />
+        </div>
       ) : ( // If userId does not exist (no user logged in), show login and signup links
         <div>
           <p>Please <NavLink to="/login">Login</NavLink> or <NavLink to="/signup">Sign Up</NavLink></p>

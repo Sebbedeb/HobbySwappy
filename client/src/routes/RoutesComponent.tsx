@@ -16,7 +16,7 @@ function RoutesComponent() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<MainLayout />} >
+        <Route path="/" element={<MainLayout />} errorElement={<ErrorPageComponent />} >
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<UserSignUp />} />
           <Route path="/user/*" element={<UserPage />} />
