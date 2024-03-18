@@ -21,3 +21,14 @@ export const EDIT_USER = gql`
     }
   }
 `;
+
+export const GET_USERS = gql`
+  query users {
+    users {
+      userId
+      userName
+      userAddress
+      userZip
+    }
+  }
+`;
