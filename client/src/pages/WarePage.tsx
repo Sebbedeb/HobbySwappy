@@ -36,15 +36,15 @@ function WarePage() {
     return (
         <div>
             <h1>Wares</h1>
-            <button onClick={() => setCategoryId(1)}>Category 1</button>
-            <button onClick={() => setCategoryId(2)}>Category 2</button>
-            <button onClick={() => setCategoryId(3)}>Category 3</button>
+            <button onClick={() => setCategoryId(1)}>Nerdy Stuff</button>
+            <button onClick={() => setCategoryId(2)}>Creative Stuff</button>
+            <button onClick={() => setCategoryId(3)}>Sports</button>
             <button onClick={() => setCategoryId(0)}>All</button>
 
             {loading && <p>Loading...</p>}
             {error && <p>Error</p>}
 
-            {/* display the wares as a clickable photo and title with a price underneath */}
+
             <div className="waresContainer">
             
                 {data && data.wares.map((ware: Ware) => (

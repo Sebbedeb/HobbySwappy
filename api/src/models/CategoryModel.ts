@@ -7,6 +7,9 @@ export interface Category extends Document {
 }
 
 enum CategoryName {
+    NerdyStuff = 'Nerdy Stuff',
+    CreativeStuff = 'Creative Stuff',
+    Sports = 'Sports',
     TradingCards = 'Trading Cards',
     BoardGames = 'Board Games',
     VideoGames = 'Video Games',

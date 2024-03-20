@@ -7,10 +7,8 @@ interface DisplayWareProps {
 }
 
 const DisplayWare: React.FC<DisplayWareProps> = ({ ware, handleClick }) => {
-    const userId: number = parseInt(localStorage.getItem("userId") as string);
+    console.log(ware);
     
-    // Only render the ware if it belongs to another user
-    if (ware.userId !== userId) {
         return (
             <div key={ware.wareId} className="wareItem" onClick={(event) => handleClick(event, ware.wareId)}>
                 <div className="wareContainer">
@@ -26,10 +24,7 @@ const DisplayWare: React.FC<DisplayWareProps> = ({ ware, handleClick }) => {
                 </div>
             </div>
         );
-    } else {
-        // Return null if the ware belongs to the current user
-        return null;
-    }
-}
+    } 
+
 
 export default DisplayWare;
